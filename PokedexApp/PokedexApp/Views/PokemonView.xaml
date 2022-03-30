@@ -1,0 +1,186 @@
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PokedexApp.Views.PokemonView"
+             xmlns:vm="clr-namespace:PokedexApp.ViewModels" 
+             xmlns:telerikInput="clr-namespace:Telerik.XamarinForms.Input;assembly=Telerik.Maui.Compatibility"
+             xmlns:telerikChart="clr-namespace:Telerik.XamarinForms.Chart;assembly=Telerik.Maui.Compatibility"
+             xmlns:telerikMauiControls="clr-namespace:Telerik.Maui.Controls;assembly=Telerik.Maui.Controls"
+             xmlns:converters="clr-namespace:PokedexApp.Converters"
+             BackgroundColor="#e8e2d8">
+
+    <ContentPage.Resources>
+        <converters:BoolToStringConverter x:Key="boolToStringConverter"/>
+        <converters:PokemonTypeToColorConverter x:Key="pokemonTypeToColorConverter"/>
+        <converters:IntToStringConverter x:Key="intToStringConverter"/>
+    </ContentPage.Resources>
+
+    <ContentPage.BindingContext>
+        <vm:PokemonViewModel/>
+    </ContentPage.BindingContext>
+    
+    <ContentPage.Content>
+        <ScrollView Padding="30">
+            <StackLayout Spacing="10" Margin="10">
+                <telerikMauiControls:RadBorder BackgroundColor="{DynamicResource PageBackgroundColor}"
+                                               BorderColor="#a4cbed"
+                                               BorderThickness="2"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center"
+                                               CornerRadius="5"
+                                               WidthRequest="125"
+                                               HeightRequest="35">
+                    <Label HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           Text="{Binding Pokemon.Name}"
+                           FontSize="Large"/>
+                </telerikMauiControls:RadBorder>
+
+                <StackLayout Orientation="Horizontal">
+                    <telerikMauiControls:RadBorder BorderColor="{DynamicResource PageBackgroundColor}" 
+                                                   BorderThickness="9"
+                                                   HeightRequest="150"
+                                                   WidthRequest="150"
+                                                   CornerRadius="75"
+                                                   HorizontalOptions="Center">
+                        <Image Source="{Binding Pokemon.Image}" 
+                               Aspect="AspectFill" 
+                               WidthRequest="131" 
+                               HeightRequest="150"/>
+                    </telerikMauiControls:RadBorder>
+
+                    <StackLayout>
+                        <StackLayout Orientation="Horizontal">
+                            <Label Style="{StaticResource titleLabel}"
+                                   Text="National Number"/>
+
+                            <Label Style="{StaticResource valueLabel}"
+                                   Text="{Binding Pokemon.NationalNumber}"/>
+                        </StackLayout>
+
+                        <StackLayout Orientation="Horizontal">
+                            <telerikMauiControls:RadBorder BackgroundColor="{Binding Pokemon.Type1, Converter={StaticResource pokemonTypeToColorConverter}}"
+                                                           BorderColor="#a4cbed"
+                                                           BorderThickness="2"
+                                                           HorizontalOptions="Center"
+                                                           VerticalOptions="Center"
+                                                           CornerRadius="10"
+                                                           WidthRequest="75"
+                                                           HeightRequest="25">
+                                <Label HorizontalOptions="Center"
+                                       VerticalOptions="Center"
+                                       Text="{Binding Pokemon.Type1}"
+                                       FontSize="Small"/>
+                            </telerikMauiControls:RadBorder>
+
+                            <telerikMauiControls:RadBorder BackgroundColor="{Binding Pokemon.Type2, Converter={StaticResource pokemonTypeToColorConverter}}"
+                                                           BorderColor="#a4cbed"
+                                                           BorderThickness="2"
+                                                           HorizontalOptions="Center"
+                                                           VerticalOptions="Center"
+                                                           CornerRadius="10"
+                                                           WidthRequest="75"
+                                                           HeightRequest="25">
+                                <Label HorizontalOptions="Center"
+                                       VerticalOptions="Center"
+                                       Text="{Binding Pokemon.Type2}"
+                                       FontSize="Small"/>
+                            </telerikMauiControls:RadBorder>
+                        </StackLayout>
+
+                        <StackLayout>
+                            <Label WidthRequest="150" 
+                                   Style="{StaticResource valueLabel}"
+                                   Text="{Binding Pokemon.Description}"/>
+                        </StackLayout>
+
+                    </StackLayout>
+
+
+                </StackLayout>
+
+                <Label Text="Moves:"
+                       FontSize="Medium"
+                       TextColor="DarkRed"
+                       HorizontalOptions="Start"/>
+
+                <telerikMauiControls:RadItemsControl ItemsSource="{Binding PokemonMoves, Mode=TwoWay}" 
+                                                     HeightRequest="100"
+                                                     WidthRequest="150" >
+                    <telerikMauiControls:RadItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid ColumnDefinitions="100,100" 
+                                  WidthRequest="300">
+                                <Label Grid.Column="0" 
+                                       Style="{StaticResource valueLabel}" 
+                                       Text="{Binding Name}" 
+                                       FontSize="Medium"/>
+
+                                <StackLayout Grid.Column="1" 
+                                             Orientation="Horizontal">
+                                    <telerikMauiControls:RadBorder BackgroundColor="#0E88F2"
+                                                                   BorderColor="#a4cbed"
+                                                                   BorderThickness="2"
+                                                                   HorizontalOptions="Center"
+                                                                   VerticalOptions="Center"
+                                                                   CornerRadius="10"
+                                                                   WidthRequest="75"
+                                                                   HeightRequest="25">
+                                        <Label HorizontalOptions="Center"
+                                               VerticalOptions="Center"
+                                               Text="{Binding Type}"
+                                               FontSize="Small"/>
+                                    </telerikMauiControls:RadBorder>
+                                </StackLayout>
+                            </Grid>
+                        </DataTemplate>
+                    </telerikMauiControls:RadItemsControl.ItemTemplate>
+                </telerikMauiControls:RadItemsControl>
+
+                <telerikMauiControls:RadBorder CornerRadius="20"
+                                               BorderColor="{DynamicResource PageBackgroundColor}"
+                                               BorderThickness="2"
+                                               HorizontalOptions="Center">
+                    <telerikInput:RadButton Text="{Binding StatsVisibility, Converter={StaticResource boolToStringConverter}}"
+                                            TextColor="#0E88F2"
+                                            FontFamily="OpenSansRegular"
+                                            BackgroundColor="White"
+                                            Command="{Binding ShowHideStatsCommand}"/>
+                </telerikMauiControls:RadBorder>
+
+                <telerikChart:RadCartesianChart HeightRequest="150">
+                    <telerikChart:RadCartesianChart.Triggers>
+                        <DataTrigger TargetType="telerikChart:RadCartesianChart"
+                                     Binding="{Binding StatsVisibility}"
+                                     Value="False">
+                            <Setter Property="Opacity" Value="0"/>
+                        </DataTrigger>
+                    </telerikChart:RadCartesianChart.Triggers>
+                    <telerikChart:RadCartesianChart.HorizontalAxis>
+                        <telerikChart:NumericalAxis Minimum="0"
+                                                    Maximum="255" />
+                    </telerikChart:RadCartesianChart.HorizontalAxis>
+                    <telerikChart:RadCartesianChart.VerticalAxis>
+                        <telerikChart:CategoricalAxis LabelFitMode="MultiLine"/>
+                    </telerikChart:RadCartesianChart.VerticalAxis>
+                    <telerikChart:RadCartesianChart.Series>
+                        <telerikChart:BarSeries CategoryBinding="Category"
+                                                ValueBinding="Value" 
+                                                AllowSelect="True"
+                                                ItemsSource="{Binding PokemonStats}">
+                        </telerikChart:BarSeries>
+                    </telerikChart:RadCartesianChart.Series>
+                    <telerikChart:RadCartesianChart.Palette>
+                        <telerikChart:ChartPalette>
+                            <telerikChart:ChartPalette.Entries>
+                                <telerikChart:PaletteEntry FillColor="#0E88F2"  
+                                                           StrokeColor="#FFAC3E" />
+                            </telerikChart:ChartPalette.Entries>
+                        </telerikChart:ChartPalette>
+                    </telerikChart:RadCartesianChart.Palette>
+                </telerikChart:RadCartesianChart>
+
+
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>
